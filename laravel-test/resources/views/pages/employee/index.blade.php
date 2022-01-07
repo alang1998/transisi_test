@@ -7,12 +7,12 @@
                 <div>List of Employee</div>
                 <x-action-dropdown>
                     <a href="{{ route('employee.create') }}" class="dropdown-item" type="button">Add Employee</a>
-                    <a href="#" class="dropdown-item" type="button">Export Employees</a>
+                    <a href="{{ route('employee.exportPDF') }}" class="dropdown-item" type="button">Export Employees</a>
                 </x-action-dropdown>
             </div>
         </div>
         <div class="card-body">
-            <div>
+            <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>

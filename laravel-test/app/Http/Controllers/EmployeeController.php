@@ -6,6 +6,7 @@ use App\Employee;
 use App\Http\Requests\EmployeeRequest;
 use App\Services\EmployeeService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class EmployeeController extends Controller
 {
@@ -99,5 +100,12 @@ class EmployeeController extends Controller
     public function destroy(Employee $employee)
     {
         $destroy = $this->employeeService->destroyHandler($employee);
+    }
+
+    public function exportPDF()
+    {
+        $pdf = $this->employeeService->exportHandler($this->routeView);
+
+        return $pdf->download('export-employee-'.date('dmy').'-'.Str::random(5).'.pdf');
     }
 }

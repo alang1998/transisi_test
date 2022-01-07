@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
+use App\Company;
 use App\Employee;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Storage;
+use PDF;
 
 class EmployeeService
 {
@@ -30,5 +31,13 @@ class EmployeeService
     public function destroyHandler($employee)
     {
         $employee->delete();
+    }
+
+    public function exportHandler($routeView)
+    {
+        $companies = Company::with('employee')->whereHas('employee')->get();
+        $pdf = PDF::loadView($routeView . 'exportPDF', compact('companies'));
+
+        return $pdf;
     }
 }

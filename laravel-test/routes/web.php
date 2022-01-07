@@ -17,4 +17,5 @@ Route::middleware('auth')->group(function() {
     Route::get('getCompany', 'CompanyController@getCompany')->name('company.select');
 
     Route::resource('employee', 'EmployeeController');
+    Route::get('exportPDF', 'EmployeeController@exportPDF')->name('employee.exportPDF');
 });

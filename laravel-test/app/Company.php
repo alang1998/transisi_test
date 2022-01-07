@@ -13,4 +13,9 @@ class Company extends Model
         $this->fill($inputs);
         $this->save();
     }
+
+    public function employee()
+    {
+        return $this->hasMany(Employee::class);
+    }
 }
