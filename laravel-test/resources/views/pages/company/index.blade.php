@@ -7,6 +7,9 @@
                 <div>List of Company</div>
                 <x-action-dropdown>
                     <a href="{{ route('company.create') }}" class="dropdown-item" type="button">Add Company</a>
+                    <button type="button" class="dropdown-item" data-toggle="modal" data-target="#importModal">
+                        Import Companies
+                    </button>
                 </x-action-dropdown>
             </div>
         </div>
@@ -30,10 +33,10 @@
                                 <td>{{ $company->email }}</td>
                                 <td>{{ $company->website }}</td>
                                 <td>
-                                    <x-action-dropdown>                                        
+                                    <x-action-dropdown>
                                         <a href="{{ route('company.show', $company) }}" class="dropdown-item" type="button">Show</a>
-                                        <a href="{{ route('company.create') }}" class="dropdown-item" type="button">Edit</a>
-                                        <a href="{{ route('company.create') }}" class="dropdown-item" type="button">Delete</a>
+                                        <a href="{{ route('company.edit', $company) }}" class="dropdown-item" type="button">Edit</a>
+                                        <button class="dropdown-item delete-item" data-url="{{ route('company.destroy', $company) }}" type="button">Delete</button>
                                     </x-action-dropdown>
                                 </td>
                             </tr>
@@ -44,4 +47,30 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('modal')
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="{{ route('company.import') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importModalTitle">Import Companies</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <input type="file" name="import" class="form-control-file">
+                        <x-validation-error name="import" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection

@@ -3,10 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Employee;
+use App\Http\Requests\EmployeeRequest;
+use App\Services\EmployeeService;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
+    private $employeeService;
+    private $baseRoute = 'employee.';
+    private $routeView = 'pages.employee.';
+    private $recordPerPage = 5;
+
+    public function __construct(EmployeeService $employeeService)
+    {
+        $this->employeeService = $employeeService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +26,9 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
+        $employees = $this->employeeService->getRecords($this->recordPerPage);
+
+        return view($this->routeView . 'index', compact('employees'));
     }
 
     /**
@@ -24,7 +38,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        return view($this->routeView . 'create');
     }
 
     /**
@@ -33,9 +47,11 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EmployeeRequest $request)
     {
-        //
+        $store = $this->employeeService->storeHandler($request);
+
+        return back()->with('success', __('message.create_success'));
     }
 
     /**
@@ -46,7 +62,7 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        //
+        return view($this->routeView . 'show', compact('employee'));
     }
 
     /**
@@ -57,7 +73,7 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        //
+        return view($this->routeView . 'edit', compact('employee'));
     }
 
     /**
@@ -69,7 +85,9 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, Employee $employee)
     {
-        //
+        $update = $this->employeeService->updateHandler($request, $employee);
+
+        return redirect()->route($this->baseRoute . 'index')->with('success', __('message.update_success'));
     }
 
     /**
@@ -80,6 +98,6 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
-        //
+        $destroy = $this->employeeService->destroyHandler($employee);
     }
 }

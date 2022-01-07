@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,21 +18,45 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
     <div id="app">
         <x-navbar></x-navbar>
-        <div class="row">
-            <div class="col-md-3">
-                <x-sidebar></x-sidebar>
-            </div>
-            <div class="col-md-9">
-                <div class="container py-5">
-                    <x-alert></x-alert>
-                    @yield('content')
+        @guest
+            <div class="container py-4">
+                <x-alert></x-alert>
+                @yield('content')
+            </div>            
+        @else
+            <div class="row">
+                <div class="col-md-3">
+                    <x-sidebar></x-sidebar>
+                </div>
+                <div class="col-md-9">
+                    <div class="container py-5">
+                        <x-alert></x-alert>
+                        @yield('content')
+                    </div>
                 </div>
             </div>
-        </div>
+
+            @yield('modal')
+
+        @endguest
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            $('.delete-item').on('click', function(e) {
+                const url = $(this).data('url');
+                deleteConfirm(url);
+            })
+
+        })
+    </script>
+    @yield('scripts')
 </body>
 </html>

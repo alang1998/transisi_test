@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 class CompanyController extends Controller
 {
     private $companyService;
-    private $baseRoute = 'pages.company.';
+    private $baseRoute = 'company.';
+    private $routeView = 'pages.company.';
     private $recordPerPage = 5;
 
     public function __construct(CompanyService $companyService)
@@ -24,9 +25,9 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $data['companies'] = $this->companyService->getRecords($this->recordPerPage);
+        $companies = $this->companyService->getRecords($this->recordPerPage);
 
-        return view($this->baseRoute . 'index', $data);
+        return view($this->routeView . 'index', compact('companies'));
     }
 
     /**
@@ -36,7 +37,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view($this->baseRoute . 'create');
+        return view($this->routeView . 'create');
     }
 
     /**
@@ -47,7 +48,7 @@ class CompanyController extends Controller
      */
     public function store(CompanyRequest $request)
     {
-        $store = $this->companyService->handleStore($request);
+        $store = $this->companyService->storeHandler($request);
 
         return back()->with('success', __('message.create_success'));
     }
@@ -60,7 +61,7 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        return view($this->baseRoute . 'show', compact('company'));
+        return view($this->routeView . 'show', compact('company'));
     }
 
     /**
@@ -71,7 +72,7 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
-        //
+        return view($this->routeView . 'edit', compact('company'));
     }
 
     /**
@@ -81,9 +82,11 @@ class CompanyController extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(CompanyRequest $request, Company $company)
     {
-        //
+        $update = $this->companyService->updateHandler($request, $company);
+
+        return redirect()->route($this->baseRoute . 'index')->with('success', __('message.update_success'));
     }
 
     /**
@@ -94,6 +97,22 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
-        //
+        $destroy = $this->companyService->destroyHandler($company);
+    }
+
+    public function import(Request $request)
+    {
+        $import = $this->companyService->importHanlder($request);
+        
+        return redirect()->route($this->baseRoute . 'index')
+            ->with('success', __('message.update_success'));
+
+    }
+
+    
+
+    public function getCompany(Request $request)
+    {
+        return $this->companyService->companySelect2($request);
     }
 }
