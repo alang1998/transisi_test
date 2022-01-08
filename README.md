@@ -10,4 +10,4 @@ Pada folder laravel-test berisi hasil test Bagian 2 (Laravel Dasar)
 
 ## File Import
 
-Pada folder file-import berisi file excel digunakan untuk import data Company
+Pada folder file-import berisi file excel digunakan untuk import data
